@@ -1,2 +1,4 @@
 # rc-mission-common
-RC Mission Common Packages
+Collection common packages used by multiple RC mission softwares ((server, commander, operator))
+
+## List of packages
