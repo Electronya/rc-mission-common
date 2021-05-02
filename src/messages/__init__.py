@@ -4,52 +4,41 @@ class BaseMessage:
     """
     The RC mission base message class.
     """
-    SENDER_ID_KEY = 'sender'
-    RECEIVER_ID_KEY = 'receiver'
+    UNIT_ID_KEY = 'unit id'
     PAYLOAD_KEY = 'payload'
 
-    COMMADER_ID = 'commander'
-    OPERATOR_ID = 'operator'
-
-    def __init__(self, sender=None, receiver=None, payload=None):
+    def __init__(self, topic_root, unit, payload=None, qos=0):
         """
         The base message constructor.
 
         Params:
-            sender:     The sender ID. Default: None.
-            receiver:   The receiver ID. Default: None.
+            topic_root: The message topic root.
+            unit:       The unit ID.
             payload:    Dictionary representing the message json payload. Default: None.
+            qos:        The message quality of service. Default: 0.
         """
-        self._sender = sender
-        self._receiver = receiver
+        self._unit = unit
         self._payload = payload
+        self._qos = qos
+        self._topic = f"{topic_root}/{unit}"
 
-    def set_sender(self, sender):
+    def get_topic(self):
         """
-        Set the sender ID.
+        Get the message topic.
 
-        Params:
-            sender:     The sender ID.
+        Return:
+            The message topic.
         """
-        self._sender = sender
+        return self._topic
 
-    def get_sender(self):
+    def get_unit(self):
         """
-        Get the sender ID.
+        Get the unit ID.
 
-        Return
-            The message sender ID.
+        Return:
+            The message unit ID.
         """
-        return self._sender
-
-    def set_receiver(self, receiver):
-        """
-        Set the receiver ID.
-
-        Params:
-            receiver:   The receiver ID.
-        """
-        self._receiver = receiver
+        return self._unit
 
     def set_payload(self, payload):
         """
@@ -69,6 +58,24 @@ class BaseMessage:
         """
         return self._payload
 
+    def set_qos(self, qos):
+        """
+        Set the message quality of service.
+
+        Params:
+            qos:        The message quality of service.
+        """
+        self._qos = qos
+
+    def get_qos(self):
+        """
+        Get the message quality of service.
+
+        Return:
+            The message quality of service.
+        """
+        return self._qos
+
     def set_from_json(self, msg_json):
         """
         Set the message from its json string representation.
@@ -77,8 +84,7 @@ class BaseMessage:
             msg_json:   The json string containing the message.
         """
         msg = json.loads(msg_json)
-        self._sender = msg[self.SENDER_ID_KEY]
-        self._receiver = msg[self.RECEIVER_ID_KEY]
+        self._unit = msg[self.UNIT_ID_KEY]
         self._payload = msg[self.PAYLOAD_KEY]
 
     def to_json(self):
@@ -89,44 +95,44 @@ class BaseMessage:
             The message as a json string.
         """
         msg = {}
-        msg[self.SENDER_ID_KEY] = self._sender
-        msg[self.RECEIVER_ID_KEY] = self._receiver
+        msg[self.UNIT_ID_KEY] = self._unit
         msg[self.PAYLOAD_KEY] = self._payload
         return json.dumps(msg)
 
-class ClientStateMessage(BaseMessage):
+class UnitConnectionState(BaseMessage):
     """
     The client state message class.
     """
     STATE_KEY = 'state'
-    READY_STATE = 'ready'
-    BUSY_STATE = 'busy'
+    ONLINE_STATE = 'online'
+    OFFLINE_STATE = 'offline'
+    TOPIC_ROOT = 'units/connectionState'
+    QOS = 1
 
-    def __init__(self, sender=None, receiver=None, payload=None):
+    def __init__(self, unit=None, payload=None):
         """
         The client state message constructor.
 
         Params:
-            sender:     The sender ID. Default: None.
-            receiver:   The receiver ID. Defaut: None.
+            unit:       The unit ID. Default: None.
             payload:    Dictionary representing the message payload. Default: None.
         """
-        super().__init__(sender=sender, receiver=receiver, payload=payload)
+        super().__init__(self.TOPIC_ROOT, unit, payload=payload, qos=self.QOS)
 
-    def set_as_busy(self):
+    def set_as_offline(self):
         """
-        Change the state to busy.
+        Change the state to offline.
         """
         payload = {}
-        payload[self.STATE_KEY] = self.BUSY_STATE
+        payload[self.STATE_KEY] = self.OFFLINE_STATE
         super().set_payload(payload)
 
-    def set_as_ready(self):
+    def set_as_online(self):
         """
-        Change the state to ready.
+        Change the state to online.
         """
         payload = {}
-        payload[self.STATE_KEY] = self.READY_STATE
+        payload[self.STATE_KEY] = self.ONLINE_STATE
         super.set_payload(payload)
 
     def get_state(self):
@@ -138,22 +144,22 @@ class ClientStateMessage(BaseMessage):
         """
         return super().get_payload()[self.STATE_KEY]
 
-    def is_busy(self):
+    def is_offline(self):
         """
-        Test if the state contained in the message is BUSY.
+        Test if the state contained in the message is ONLINE.
 
         Return:
-            True if the state is busy, Flase otherwise.
+            True if the state is online, Flase otherwise.
         """
         state = super().get_payload()[self.STATE_KEY]
-        return True if state == self.BUSY_STATE else False
+        return True if state == self.OFFLINE_STATE else False
 
-    def is_ready(self):
+    def is_online(self):
         """
-        Test if the state contained in the message is READY.
+        Test if the state contained in the message is ONLINE.
 
         Return:
-            True if the state is ready, Flase otherwise.
+            True if the state is online, Flase otherwise.
         """
         state = super().get_payload()[self.STATE_KEY]
-        return True if state == self.READY_STATE else False
+        return True if state == self.ONLINE_STATE else False
