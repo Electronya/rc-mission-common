@@ -36,4 +36,4 @@ class UnitSteeringMessage(BaseMessage):
         Return:
             The steering modifier.
         """
-        super().get_payload()[self.STEERING_KEY]
+        return super().get_payload()[self.STEERING_KEY]
