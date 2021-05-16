@@ -10,15 +10,15 @@ class UnitConnectionState(BaseMessage):
     TOPIC_ROOT = 'units/connectionState'
     QOS = 1
 
-    def __init__(self, unit=None, payload=None):
+    def __init__(self, unit, payload=None):
         """
         The client state message constructor.
 
         Params:
-            unit:       The unit ID. Default: None.
+            unit:       The unit ID.
             payload:    Dictionary representing the message payload. Default: None.
         """
-        super().__init__(self.TOPIC_ROOT, unit, payload=payload, qos=self.QOS)
+        super().__init__(f"{self.TOPIC_ROOT}/{unit}", unit, payload=payload, qos=self.QOS)
 
     def set_as_offline(self):
         """

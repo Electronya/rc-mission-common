@@ -7,12 +7,12 @@ class BaseMessage:
     UNIT_ID_KEY = 'unit id'
     PAYLOAD_KEY = 'payload'
 
-    def __init__(self, topic_root, unit, payload=None, qos=0):
+    def __init__(self, topic, unit, payload=None, qos=0):
         """
         The base message constructor.
 
         Params:
-            topic_root: The message topic root.
+            topic:      The message topic.
             unit:       The unit ID.
             payload:    Dictionary representing the message json payload. Default: None.
             qos:        The message quality of service. Default: 0.
@@ -20,7 +20,7 @@ class BaseMessage:
         self._unit = unit
         self._payload = payload
         self._qos = qos
-        self._topic = f"{topic_root}/{unit}"
+        self._topic = topic
 
     def get_topic(self):
         """
