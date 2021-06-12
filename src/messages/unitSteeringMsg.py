@@ -1,5 +1,6 @@
 from .baseMsg import BaseMessage
 
+
 class UnitSteeringMessage(BaseMessage):
     """
     The unit steering message.
@@ -16,7 +17,8 @@ class UnitSteeringMessage(BaseMessage):
             payload:        The message payload.
             qos:            The message QoS.
         """
-        super().__init__(f"{self.TOPIC_ROOT}/{unit}/steering", unit, payload=payload, qos=qos)
+        super().__init__(f"{self.TOPIC_ROOT}/{unit}/steering",
+                         unit, payload=payload, qos=qos)
 
     def update_modifier(self, modifier):
         """

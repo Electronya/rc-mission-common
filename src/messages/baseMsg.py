@@ -1,5 +1,6 @@
 import json
 
+
 class BaseMessage:
     """
     The RC mission base message class.
@@ -14,7 +15,8 @@ class BaseMessage:
         Params:
             topic:      The message topic.
             unit:       The unit ID.
-            payload:    Dictionary representing the message json payload. Default: None.
+            payload:    Dictionary representing the message json payload.
+                        Default: None.
             qos:        The message quality of service. Default: 0.
         """
         self._unit = unit

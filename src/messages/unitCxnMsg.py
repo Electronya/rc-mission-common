@@ -1,5 +1,6 @@
 from .baseMsg import BaseMessage
 
+
 class UnitConnectionState(BaseMessage):
     """
     The client state message class.
@@ -16,9 +17,11 @@ class UnitConnectionState(BaseMessage):
 
         Params:
             unit:       The unit ID.
-            payload:    Dictionary representing the message payload. Default: None.
+            payload:    Dictionary representing the message payload.
+                        Default: None.
         """
-        super().__init__(f"{self.TOPIC_ROOT}/{unit}", unit, payload=payload, qos=self.QOS)
+        super().__init__(f"{self.TOPIC_ROOT}/{unit}", unit,
+                         payload=payload, qos=self.QOS)
 
     def set_as_offline(self):
         """
