@@ -7,7 +7,7 @@ import sys
 
 sys.path.append(os.path.abspath('./src'))
 
-import mqttClient as client     # noqa: E402
+import mqttClient as client                             # noqa: E402
 from messages.unitCxnMsg import UnitConnectionState     # noqa: E402
 
 
@@ -187,3 +187,45 @@ class TestMqttClient(TestCase):
                                          f"log: {testMsg}")]
         client.logger.warn.assert_has_calls(warnCalls)
         client.logger.error.assert_called_once_with(testMsg)
+
+    def test_connectNotInit(self):
+        """
+        The connect function must raise a MqttClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        client.client = None
+        testIp = '192.168.1.45'
+        testPort = 1883
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.connect(testIp, testPort)
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.connect.assert_not_called()
+
+    def test_connect(self):
+        """
+        The connect function must try to connect to the broker.
+        """
+        testIp = '192.168.1.45'
+        testPort = 1883
+        client.connect(testIp, testPort)
+        client.client.connect.assert_called_once_with(testIp, port=testPort)
+
+    def test_disconnectNotInit(self):
+        """
+        The disconnect function must raise a MqttClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        client.client = None
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.disconnect()
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.disconnect.assert_not_called()
+
+    def test_disconnect(self):
+        """
+        The disconnect function must disconect from the broker.
+        """
+        client.disconnect()
+        client.client.disconnect.assert_called_once()

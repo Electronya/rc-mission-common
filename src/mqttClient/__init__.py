@@ -1,6 +1,6 @@
-from logging import log
 import paho.mqtt.client as mqtt
 
+from .exceptions import MqttClientNotInit
 from messages.unitCxnMsg import UnitConnectionState
 
 client = None
@@ -140,3 +140,31 @@ def _onLog(client, usrData, lvl, msg) -> None:
         logger.error(msg)
     else:
         logger.warn(f"unknown level log: {msg}")
+
+
+def connect(ip: str, port: int) -> None:
+    """
+    Connect to the broker.
+
+    Params:
+        ip:     The broker IP address.
+        port:   The broker listening port.
+    """
+    global client
+    global logger
+    if client is None:
+        raise MqttClientNotInit()
+    logger.info(f"trying to connect to broker: {ip}:{port}")
+    client.connect(ip, port=port)
+
+
+def disconnect() -> None:
+    """
+    Disconnect from the broker.
+    """
+    global client
+    global logger
+    if client is None:
+        raise MqttClientNotInit()
+    logger.info('disconnecting from the broker')
+    client.disconnect()
