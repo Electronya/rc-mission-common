@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "venv/bin/python3",
+    "python.analysis.extraPaths": ["./src"],
+    "cornflakes.linter.executablePath": "venv/bin/flake8"
+}
