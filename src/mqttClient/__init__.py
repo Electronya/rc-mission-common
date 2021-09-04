@@ -152,7 +152,7 @@ def connect(ip: str, port: int) -> None:
     """
     global client
     global logger
-    if client is None:
+    if client is None or logger is None:
         raise MqttClientNotInit()
     logger.info(f"trying to connect to broker: {ip}:{port}")
     client.connect(ip, port=port)
@@ -164,7 +164,31 @@ def disconnect() -> None:
     """
     global client
     global logger
-    if client is None:
+    if client is None or logger is None:
         raise MqttClientNotInit()
     logger.info('disconnecting from the broker')
     client.disconnect()
+
+
+def startLoop() -> None:
+    """
+    Start the network loop.
+    """
+    global client
+    global logger
+    if client is None or logger is None:
+        raise MqttClientNotInit()
+    logger.info('starting network loop')
+    client.loop_start()
+
+
+def stopLoop() -> None:
+    """
+    Stop the network loop.
+    """
+    global client
+    global logger
+    if client is None or logger is None:
+        raise MqttClientNotInit()
+    logger.info('stopping network loop')
+    client.loop_stop()

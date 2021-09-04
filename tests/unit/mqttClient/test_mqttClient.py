@@ -229,3 +229,41 @@ class TestMqttClient(TestCase):
         """
         client.disconnect()
         client.client.disconnect.assert_called_once()
+
+    def test_startLoopNotInit(self):
+        """
+        The startLoop function must raise a MqttClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        client.client = None
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.startLoop()
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.loop_start.assert_not_called()
+
+    def test_startLoop(self):
+        """
+        The startLoop function must start the MQTT client network loop.
+        """
+        client.startLoop()
+        client.client.loop_start.assert_called_once()
+
+    def test_stopLoopNotInit(self) -> None:
+        """
+        The stopLoop function must raise a MqttClientNotinit exception
+        and do nothing else if the client has not been initialized.
+        """
+        client.client = None
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.stopLoop()
+            self.assertTrue(isinstance(context.exception,
+                            client.MqttClientNotInit))
+            client.client.loop_stop.assert_not_called()
+
+    def test_stopLoop(self):
+        """
+        The stopLoop function must stop the MQTT client network loop.
+        """
+        client.stopLoop()
+        client.client.loop_stop.assert_called_once()
