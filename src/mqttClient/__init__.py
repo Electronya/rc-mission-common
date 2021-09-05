@@ -1,4 +1,3 @@
-from array import array
 import paho.mqtt.client as mqtt
 
 from .exceptions import MqttClientNotInit
@@ -212,7 +211,7 @@ def publish(msg: BaseMessage) -> None:
                    qos=msg.get_qos(), retain=msg.get_retain())
 
 
-def subscribe(subs: array) -> None:
+def subscribe(subs: tuple) -> None:
     """
     Subscribe to a list of subscriptions.
 
@@ -226,3 +225,19 @@ def subscribe(subs: array) -> None:
     for sub in subs:
         logger.info(f"subscribing to {sub['topic']}")
         client.subscribe(sub['topic'], qos=sub['qos'])
+
+
+def unscubscribe(subs: tuple) -> None:
+    """
+    Unsubscribe from subscriptions.
+
+    Params:
+        subs:   The list of subscriptions to unsubscribe from.
+    """
+    global client
+    global logger
+    if client is None or logger is None:
+        raise MqttClientNotInit()
+    for sub in subs:
+        logger.info(f"unsubscribing from {sub['topic']}")
+        client.unsubscribe(sub['topic'])

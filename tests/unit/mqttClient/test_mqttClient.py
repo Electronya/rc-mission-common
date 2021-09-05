@@ -314,10 +314,33 @@ class TestMqttClient(TestCase):
 
     def test_subscribe(self):
         """
-        The subscribe function must subscribe to the desired topics.
+        The subscribe function must subscribe to the desired subscriptions.
         """
         expectedCalls = []
         for testSub in self.testSubs:
             expectedCalls.append(call(testSub['topic'], qos=testSub['qos']))
         client.subscribe(self.testSubs)
         client.client.subscribe.assert_has_calls(expectedCalls)
+
+    def test_unsubscribeNotInit(self):
+        """
+        The unsubscribe function must raise a MqttClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        client.client = None
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.unscubscribe(self.testSubs)
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.unsubscribe.assert_not_called()
+
+    def test_unsubscribe(self):
+        """
+        The unsubscribe function must unsubscribe from the desired
+        subscriptions
+        """
+        expectedCalls = []
+        for testSub in self.testSubs:
+            expectedCalls.append(call(testSub['topic']))
+        client.unscubscribe(self.testSubs)
+        client.client.unsubscribe.assert_has_calls(expectedCalls)
