@@ -1,7 +1,7 @@
 from .baseMsg import BaseMessage
 
 
-class UnitConnectionState(BaseMessage):
+class UnitCxnStateMsg(BaseMessage):
     """
     The client state message class.
     """
@@ -10,8 +10,9 @@ class UnitConnectionState(BaseMessage):
     OFFLINE_STATE = 'offline'
     TOPIC_ROOT = 'units/connectionState'
     QOS = 1
+    RETAIN = True
 
-    def __init__(self, unit, payload=None):
+    def __init__(self, unit: str, payload: dict = None) -> None:
         """
         The client state message constructor.
 
@@ -21,49 +22,49 @@ class UnitConnectionState(BaseMessage):
                         Default: None.
         """
         super().__init__(f"{self.TOPIC_ROOT}/{unit}", unit,
-                         payload=payload, qos=self.QOS)
+                         payload=payload, qos=self.QOS, retain=self.RETAIN)
 
-    def set_as_offline(self):
+    def setAsOffline(self) -> None:
         """
         Change the state to offline.
         """
         payload = {}
         payload[self.STATE_KEY] = self.OFFLINE_STATE
-        super().set_payload(payload)
+        super().setPayload(payload)
 
-    def set_as_online(self):
+    def setAsOnline(self) -> None:
         """
         Change the state to online.
         """
         payload = {}
         payload[self.STATE_KEY] = self.ONLINE_STATE
-        super.set_payload(payload)
+        super().setPayload(payload)
 
-    def get_state(self):
+    def getState(self) -> str:
         """
         Get the state from the message.
 
         Return:
             The state of the client contained in the message.
         """
-        return super().get_payload()[self.STATE_KEY]
+        return super().getPayload()[self.STATE_KEY]
 
-    def is_offline(self):
+    def isOffline(self) -> bool:
         """
         Test if the state contained in the message is ONLINE.
 
         Return:
             True if the state is online, Flase otherwise.
         """
-        state = super().get_payload()[self.STATE_KEY]
+        state = super().getPayload()[self.STATE_KEY]
         return True if state == self.OFFLINE_STATE else False
 
-    def is_online(self):
+    def isOnline(self) -> bool:
         """
         Test if the state contained in the message is ONLINE.
 
         Return:
             True if the state is online, Flase otherwise.
         """
-        state = super().get_payload()[self.STATE_KEY]
+        state = super().getPayload()[self.STATE_KEY]
         return True if state == self.ONLINE_STATE else False

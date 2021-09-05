@@ -8,7 +8,7 @@ import sys
 sys.path.append(os.path.abspath('./src'))
 
 import mqttClient as client                             # noqa: E402
-from messages.unitCxnMsg import UnitConnectionState     # noqa: E402
+from messages.unitCxnStateMsg import UnitCxnStateMsg    # noqa: E402
 
 
 class TestMqttClient(TestCase):
@@ -81,15 +81,15 @@ class TestMqttClient(TestCase):
         """
         client.logger = None
         client.client = None
-        testWillMsg = UnitConnectionState(unit=self.testId, payload={
-            UnitConnectionState.STATE_KEY: UnitConnectionState.OFFLINE_STATE
+        testWillMsg = UnitCxnStateMsg(unit=self.testId, payload={
+            UnitCxnStateMsg.STATE_KEY: UnitCxnStateMsg.OFFLINE_STATE
         })
         with patch('mqttClient.mqtt') as mockedMqtt:
             mockedMqtt.Client.return_value = self.mockedClient
             client.init(self.mockedLogging, self.testId, self.testPassword)
-            client.client.will_set.assert_called_once_with(testWillMsg.get_topic(),     # noqa: E501
-                                                           testWillMsg.to_json(),       # noqa: E501
-                                                           qos=testWillMsg.get_qos(),   # noqa: E501
+            client.client.will_set.assert_called_once_with(testWillMsg.getTopic(),      # noqa: E501
+                                                           testWillMsg.toJson(),       # noqa: E501
+                                                           qos=testWillMsg.getQos(),   # noqa: E501
                                                            retain=True)                 # noqa: E501
 
     def test_initSetUserPassword(self):
@@ -282,7 +282,7 @@ class TestMqttClient(TestCase):
         The publish function must raise a MqttClientNotInit exception
         and do nothing else if the client has not been initialized.
         """
-        testMsg = UnitConnectionState('test unit')
+        testMsg = UnitCxnStateMsg('test unit')
         client.client = None
         with self.assertRaises(client.MqttClientNotInit) as context:
             client.publish(testMsg)
@@ -295,11 +295,11 @@ class TestMqttClient(TestCase):
         The publish function must publish the desired message.
         """
         testPayload = {'testKey': 'test value'}
-        testMsg = UnitConnectionState('test unit', payload=testPayload)
-        expectedTopic = testMsg.get_topic()
-        expectedPayload = testMsg.to_json()
-        expectedQos = testMsg.get_qos()
-        expectedRetain = testMsg.get_retain()
+        testMsg = UnitCxnStateMsg('test unit', payload=testPayload)
+        expectedTopic = testMsg.getTopic()
+        expectedPayload = testMsg.toJson()
+        expectedQos = testMsg.getQos()
+        expectedRetain = testMsg.getRetain()
         client.publish(testMsg)
         client.client.publish.assert_called_once_with(expectedTopic,
                                                       payload=expectedPayload,

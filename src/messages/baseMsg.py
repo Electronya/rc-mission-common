@@ -8,7 +8,8 @@ class BaseMessage:
     UNIT_ID_KEY = 'unit id'
     PAYLOAD_KEY = 'payload'
 
-    def __init__(self, topic, unit, payload=None, qos=0, retain=False):
+    def __init__(self, topic: str, unit: str, payload: dict = None,
+                 qos: int = 0, retain: bool = False) -> None:
         """
         The base message constructor.
 
@@ -26,7 +27,7 @@ class BaseMessage:
         self._topic = topic
         self._retain = retain
 
-    def get_topic(self):
+    def getTopic(self) -> str:
         """
         Get the message topic.
 
@@ -35,7 +36,7 @@ class BaseMessage:
         """
         return self._topic
 
-    def get_unit(self):
+    def getUnit(self) -> str:
         """
         Get the unit ID.
 
@@ -44,7 +45,7 @@ class BaseMessage:
         """
         return self._unit
 
-    def set_payload(self, payload):
+    def setPayload(self, payload: dict) -> None:
         """
         Set the payload of the message.
 
@@ -53,7 +54,7 @@ class BaseMessage:
         """
         self._payload = payload
 
-    def get_payload(self):
+    def getPayload(self) -> dict:
         """
         Get the payload of the message.
 
@@ -62,7 +63,7 @@ class BaseMessage:
         """
         return self._payload
 
-    def set_qos(self, qos):
+    def setQos(self, qos: int) -> None:
         """
         Set the message quality of service.
 
@@ -71,7 +72,7 @@ class BaseMessage:
         """
         self._qos = qos
 
-    def get_qos(self):
+    def getQos(self) -> int:
         """
         Get the message quality of service.
 
@@ -80,7 +81,7 @@ class BaseMessage:
         """
         return self._qos
 
-    def set_retain(self, retain):
+    def setRetain(self, retain: bool) -> None:
         """
         Set the message retain flag.
 
@@ -89,7 +90,7 @@ class BaseMessage:
         """
         self._retain = retain
 
-    def get_retain(self):
+    def getRetain(self) -> bool:
         """
         Get the message retention flag.
 
@@ -98,18 +99,18 @@ class BaseMessage:
         """
         return self._retain
 
-    def set_from_json(self, msg_json):
+    def fromJson(self, msgJson: str) -> None:
         """
         Set the message from its json string representation.
 
         Params:
-            msg_json:   The json string containing the message.
+            msgJson:    The json string containing the message.
         """
-        msg = json.loads(msg_json)
+        msg = json.loads(msgJson)
         self._unit = msg[self.UNIT_ID_KEY]
         self._payload = msg[self.PAYLOAD_KEY]
 
-    def to_json(self):
+    def toJson(self) -> str:
         """
         Get the message as a json string.
 
