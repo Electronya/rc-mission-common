@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 
 from .exceptions import MqttClientNotInit
 from messages.baseMsg import BaseMessage
-from messages.unitCxnMsg import UnitConnectionState
+from messages.unitCxnStateMsg import UnitCxnStateMsg
 
 client = None
 logger = None
@@ -23,8 +23,8 @@ def init(appLogger: object, clientId: str, password: str) -> None:
         logger = appLogger.getLogger(f"MQTT-{clientId.upper()}")
         logger.info(f"creating MQTT client {clientId}")
         client = mqtt.Client(client_id=clientId)
-        cxnMsg = UnitConnectionState(clientId, {
-            UnitConnectionState.STATE_KEY: UnitConnectionState.OFFLINE_STATE
+        cxnMsg = UnitCxnStateMsg(clientId, {
+            UnitCxnStateMsg.STATE_KEY: UnitCxnStateMsg.OFFLINE_STATE
         })
         client.will_set(cxnMsg.getTopic(), cxnMsg.toJson(),
                         qos=cxnMsg.getQos(), retain=True)

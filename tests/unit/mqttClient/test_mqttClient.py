@@ -8,7 +8,7 @@ import sys
 sys.path.append(os.path.abspath('./src'))
 
 import mqttClient as client                             # noqa: E402
-from messages.unitCxnMsg import UnitConnectionState     # noqa: E402
+from messages.unitCxnStateMsg import UnitCxnStateMsg    # noqa: E402
 
 
 class TestMqttClient(TestCase):
@@ -81,8 +81,8 @@ class TestMqttClient(TestCase):
         """
         client.logger = None
         client.client = None
-        testWillMsg = UnitConnectionState(unit=self.testId, payload={
-            UnitConnectionState.STATE_KEY: UnitConnectionState.OFFLINE_STATE
+        testWillMsg = UnitCxnStateMsg(unit=self.testId, payload={
+            UnitCxnStateMsg.STATE_KEY: UnitCxnStateMsg.OFFLINE_STATE
         })
         with patch('mqttClient.mqtt') as mockedMqtt:
             mockedMqtt.Client.return_value = self.mockedClient
@@ -282,7 +282,7 @@ class TestMqttClient(TestCase):
         The publish function must raise a MqttClientNotInit exception
         and do nothing else if the client has not been initialized.
         """
-        testMsg = UnitConnectionState('test unit')
+        testMsg = UnitCxnStateMsg('test unit')
         client.client = None
         with self.assertRaises(client.MqttClientNotInit) as context:
             client.publish(testMsg)
@@ -295,7 +295,7 @@ class TestMqttClient(TestCase):
         The publish function must publish the desired message.
         """
         testPayload = {'testKey': 'test value'}
-        testMsg = UnitConnectionState('test unit', payload=testPayload)
+        testMsg = UnitCxnStateMsg('test unit', payload=testPayload)
         expectedTopic = testMsg.getTopic()
         expectedPayload = testMsg.toJson()
         expectedQos = testMsg.getQos()

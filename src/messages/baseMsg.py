@@ -9,7 +9,7 @@ class BaseMessage:
     PAYLOAD_KEY = 'payload'
 
     def __init__(self, topic: str, unit: str, payload: dict = None,
-                 qos: int = 0, retain: bool = False):
+                 qos: int = 0, retain: bool = False) -> None:
         """
         The base message constructor.
 
