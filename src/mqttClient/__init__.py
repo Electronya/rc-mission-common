@@ -241,3 +241,35 @@ def unscubscribe(subs: tuple) -> None:
     for sub in subs:
         logger.info(f"unsubscribing from {sub['topic']}")
         client.unsubscribe(sub['topic'])
+
+
+def registerMsgCallback(topic: str, callback) -> None:
+    """
+    Register a message callback for the specified topic.
+
+    Params:
+        topic:      The topic for which to register the callback.
+        callback:   The function to be called on message of the
+                    specified topic.
+    """
+    global client
+    global logger
+    if client is None or logger is None:
+        raise MqttClientNotInit()
+    logger.debug(f"registering callback {callback.__name__} for topic {topic}")
+    client.message_callback_add(topic, callback)
+
+
+def unregisterMsgCallback(topic: str):
+    """
+    Unregister the callback for the specified topic.
+
+    Params:
+        topic:  The topic from which to unregister the callback.
+    """
+    global client
+    global logger
+    if client is None or logger is None:
+        raise MqttClientNotInit()
+    logger.debug(f"unregistering callback from topic {topic}")
+    client.message_callback_remove(topic)

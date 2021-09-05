@@ -39,6 +39,12 @@ class TestMqttClient(TestCase):
         client.logger = None
         client.client = None
 
+    def _testCallback(self):
+        """
+        The callback used for test.
+        """
+        pass
+
     def test_initAlreadyInit(self):
         """
         The init function must do nothing and warn that the client has
@@ -344,3 +350,49 @@ class TestMqttClient(TestCase):
             expectedCalls.append(call(testSub['topic']))
         client.unscubscribe(self.testSubs)
         client.client.unsubscribe.assert_has_calls(expectedCalls)
+
+    def test_registerMsgCallbackNotInit(self):
+        """
+        The registerMsgCallback must raise a MqttClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        testTopic = 'test topic'
+        testCallback = 'test callback'
+        client.client = None
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.registerMsgCallback(testTopic, testCallback)
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.message_callback_add.assert_not_called()
+
+    def test_registerMsgCallback(self):
+        """
+        The registerMsgCallback must add the message callback for the
+        specified topic.
+        """
+        testTopic = 'test topic'
+        client.registerMsgCallback(testTopic, self._testCallback)
+        client.client.message_callback_add.assert_called_once_with(testTopic,
+                                                                   self._testCallback)  # noqa: E501
+
+    def test_unregisterMsgCallbackNotInit(self):
+        """
+        The unregisterMsgCallback must raise a MqttClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        client.client = None
+        testTopic = 'test topic'
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.unregisterMsgCallback(testTopic)
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.message_callback_remove.assert_not_called()
+
+    def test_unregisterMsgCallback(self):
+        """
+        The unregisterCallback must remove the message callback from
+        The specified topic.
+        """
+        testTopic = 'test topic'
+        client.unregisterMsgCallback(testTopic)
+        client.client.message_callback_remove.assert_called_once_with(testTopic)    # noqa: E501
