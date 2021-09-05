@@ -181,7 +181,7 @@ class TestMqttClient(TestCase):
 
     def test_onLog(self):
         """
-        The _onLog function must log the recieved message base on its level.
+        The _onLog function must log the received message base on its level.
         """
         testLvls = [mqtt.MQTT_LOG_DEBUG, mqtt.MQTT_LOG_NOTICE,
                     mqtt.MQTT_LOG_INFO, mqtt.MQTT_LOG_WARNING,
