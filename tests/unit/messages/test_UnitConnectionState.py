@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import call, Mock, patch
+from unittest.mock import patch
 
 import os
 import sys
@@ -29,7 +29,7 @@ class TestUnitCxnStateMsg(TestCase):
         the correct parameters.
         """
         expectedTopic = f"{UnitCxnStateMsg.TOPIC_ROOT}/{self.testUnit}"
-        testMsg = UnitCxnStateMsg(self.testUnit, self.testPayload)      # noqa: F841 E501
+        testMsg = UnitCxnStateMsg(self.testUnit, payload=self.testPayload)  # noqa: F841 E501
         mockedSuperConst.assert_called_once_with(expectedTopic,
                                                  self.testUnit,
                                                  payload=self.testPayload,

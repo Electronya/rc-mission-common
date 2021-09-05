@@ -1,41 +1,41 @@
 from .baseMsg import BaseMessage
 
 
-class UnitSteeringMessage(BaseMessage):
+class UnitSteeringMsg(BaseMessage):
     """
     The unit steering message.
     """
-    STEERING_KEY = 'steering'
+    STEERING_KEY = 'angle'
     TOPIC_ROOT = 'units'
 
-    def __init__(self, unit, payload=None, qos=0):
+    def __init__(self, unit, payload=None) -> None:
         """
         Constructor.
 
         Params:
-            unit:           The unit ID.
-            payload:        The message payload.
-            qos:            The message QoS.
+            unit:       The unit ID.
+            payload:    The message payload.
+            qos:        The message QoS.
         """
         super().__init__(f"{self.TOPIC_ROOT}/{unit}/steering",
-                         unit, payload=payload, qos=qos)
+                         unit, payload=payload)
 
-    def update_modifier(self, modifier):
+    def setAngle(self, angle: float) -> None:
         """
-        Update the steering modifier.
+        Set the steering angle.
 
         Params:
-            modifier:       The new modifier.
+            angle:      The new angle.
         """
         payload = {}
-        payload[self.STEERING_KEY] = modifier
+        payload[self.STEERING_KEY] = angle
         super().setPayload(payload)
 
-    def get_modifier(self):
+    def getAngle(self) -> float:
         """
-        Get the steering modifier.
+        Get the steering angle.
 
         Return:
-            The steering modifier.
+            The steering angle.
         """
         return super().getPayload()[self.STEERING_KEY]
