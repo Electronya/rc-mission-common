@@ -4,6 +4,7 @@ import json
 class BaseMessage:
     """
     The RC mission base message class.
+    TODO: exceptions for QoS out of range?
     """
     UNIT_ID_KEY = 'unit id'
     PAYLOAD_KEY = 'payload'

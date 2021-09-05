@@ -8,14 +8,13 @@ class UnitSteeringMsg(BaseMessage):
     STEERING_KEY = 'angle'
     TOPIC_ROOT = 'units'
 
-    def __init__(self, unit, payload=None) -> None:
+    def __init__(self, unit: str, payload=None) -> None:
         """
         Constructor.
 
         Params:
             unit:       The unit ID.
             payload:    The message payload.
-            qos:        The message QoS.
         """
         super().__init__(f"{self.TOPIC_ROOT}/{unit}/steering",
                          unit, payload=payload)
