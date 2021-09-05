@@ -21,6 +21,9 @@ class TestMqttClient(TestCase):
         """
         self.testId = 'testId'
         self.testPassword = 'testPassword'
+        self.testSubs = [{'topic': 'test topic 1', 'qos': 1},
+                         {'topic': 'test topic 2', 'qos': 0},
+                         {'topic': 'test topic 3', 'qos': 2}]
         self.mockedLogging = Mock()
         self.mockedClient = Mock()
         with patch('mqttClient.mqtt') as mockedMqtt:
@@ -267,3 +270,54 @@ class TestMqttClient(TestCase):
         """
         client.stopLoop()
         client.client.loop_stop.assert_called_once()
+
+    def test_publishNotInit(self):
+        """
+        The publish function must raise a MqttClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        testMsg = UnitConnectionState('test unit')
+        client.client = None
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.publish(testMsg)
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.publish.assert_not_called()
+
+    def test_publish(self):
+        """
+        The publish function must publish the desired message.
+        """
+        testPayload = {'testKey': 'test value'}
+        testMsg = UnitConnectionState('test unit', payload=testPayload)
+        expectedTopic = testMsg.get_topic()
+        expectedPayload = testMsg.to_json()
+        expectedQos = testMsg.get_qos()
+        expectedRetain = testMsg.get_retain()
+        client.publish(testMsg)
+        client.client.publish.assert_called_once_with(expectedTopic,
+                                                      payload=expectedPayload,
+                                                      qos=expectedQos,
+                                                      retain=expectedRetain)
+
+    def test_subscribeNotInit(self):
+        """
+        The subscribe function must raise a MqTTClientNotInit exception
+        and do nothing else if the client has not been initialized.
+        """
+        client.client = None
+        with self.assertRaises(client.MqttClientNotInit) as context:
+            client.subscribe(self.testSubs)
+            self.assertTrue(isinstance(context.exception,
+                                       client.MqttClientNotInit))
+            client.client.subscribe.assert_not_called()
+
+    def test_subscribe(self):
+        """
+        The subscribe function must subscribe to the desired topics.
+        """
+        expectedCalls = []
+        for testSub in self.testSubs:
+            expectedCalls.append(call(testSub['topic'], qos=testSub['qos']))
+        client.subscribe(self.testSubs)
+        client.client.subscribe.assert_has_calls(expectedCalls)

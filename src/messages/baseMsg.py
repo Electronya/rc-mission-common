@@ -8,7 +8,7 @@ class BaseMessage:
     UNIT_ID_KEY = 'unit id'
     PAYLOAD_KEY = 'payload'
 
-    def __init__(self, topic, unit, payload=None, qos=0):
+    def __init__(self, topic, unit, payload=None, qos=0, retain=False):
         """
         The base message constructor.
 
@@ -18,11 +18,13 @@ class BaseMessage:
             payload:    Dictionary representing the message json payload.
                         Default: None.
             qos:        The message quality of service. Default: 0.
+            retain:     The retention flag. Default: False
         """
         self._unit = unit
         self._payload = payload
         self._qos = qos
         self._topic = topic
+        self._retain = retain
 
     def get_topic(self):
         """
@@ -77,6 +79,24 @@ class BaseMessage:
             The message quality of service.
         """
         return self._qos
+
+    def set_retain(self, retain):
+        """
+        Set the message retain flag.
+
+        Params:
+            retain:     The retention flag.
+        """
+        self._retain = retain
+
+    def get_retain(self):
+        """
+        Get the message retention flag.
+
+        Return:
+            The message retention flag.
+        """
+        return self._retain
 
     def set_from_json(self, msg_json):
         """

@@ -1,6 +1,8 @@
+from array import array
 import paho.mqtt.client as mqtt
 
 from .exceptions import MqttClientNotInit
+from messages.baseMsg import BaseMessage
 from messages.unitCxnMsg import UnitConnectionState
 
 client = None
@@ -192,3 +194,35 @@ def stopLoop() -> None:
         raise MqttClientNotInit()
     logger.info('stopping network loop')
     client.loop_stop()
+
+
+def publish(msg: BaseMessage) -> None:
+    """
+    Publish a message.
+
+    Params:
+        msg:    The message to publish.
+    """
+    global client
+    global logger
+    if client is None or logger is None:
+        raise MqttClientNotInit()
+    logger.debug(f"publishing message on topic {msg.get_topic()}")
+    client.publish(msg.get_topic(), payload=msg.to_json(),
+                   qos=msg.get_qos(), retain=msg.get_retain())
+
+
+def subscribe(subs: array) -> None:
+    """
+    Subscribe to a list of subscriptions.
+
+    Params:
+        subs:   The list of subscriptions to subscribe to.
+    """
+    global client
+    global logger
+    if client is None or logger is None:
+        raise MqttClientNotInit()
+    for sub in subs:
+        logger.info(f"subscribing to {sub['topic']}")
+        client.subscribe(sub['topic'], qos=sub['qos'])
