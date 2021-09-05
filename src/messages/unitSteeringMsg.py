@@ -29,7 +29,7 @@ class UnitSteeringMessage(BaseMessage):
         """
         payload = {}
         payload[self.STEERING_KEY] = modifier
-        super().set_payload(payload)
+        super().setPayload(payload)
 
     def get_modifier(self):
         """
@@ -38,4 +38,4 @@ class UnitSteeringMessage(BaseMessage):
         Return:
             The steering modifier.
         """
-        return super().get_payload()[self.STEERING_KEY]
+        return super().getPayload()[self.STEERING_KEY]

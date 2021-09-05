@@ -87,9 +87,9 @@ class TestMqttClient(TestCase):
         with patch('mqttClient.mqtt') as mockedMqtt:
             mockedMqtt.Client.return_value = self.mockedClient
             client.init(self.mockedLogging, self.testId, self.testPassword)
-            client.client.will_set.assert_called_once_with(testWillMsg.get_topic(),     # noqa: E501
-                                                           testWillMsg.to_json(),       # noqa: E501
-                                                           qos=testWillMsg.get_qos(),   # noqa: E501
+            client.client.will_set.assert_called_once_with(testWillMsg.getTopic(),      # noqa: E501
+                                                           testWillMsg.toJson(),       # noqa: E501
+                                                           qos=testWillMsg.getQos(),   # noqa: E501
                                                            retain=True)                 # noqa: E501
 
     def test_initSetUserPassword(self):
@@ -296,10 +296,10 @@ class TestMqttClient(TestCase):
         """
         testPayload = {'testKey': 'test value'}
         testMsg = UnitConnectionState('test unit', payload=testPayload)
-        expectedTopic = testMsg.get_topic()
-        expectedPayload = testMsg.to_json()
-        expectedQos = testMsg.get_qos()
-        expectedRetain = testMsg.get_retain()
+        expectedTopic = testMsg.getTopic()
+        expectedPayload = testMsg.toJson()
+        expectedQos = testMsg.getQos()
+        expectedRetain = testMsg.getRetain()
         client.publish(testMsg)
         client.client.publish.assert_called_once_with(expectedTopic,
                                                       payload=expectedPayload,

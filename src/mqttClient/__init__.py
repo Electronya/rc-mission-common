@@ -26,8 +26,8 @@ def init(appLogger: object, clientId: str, password: str) -> None:
         cxnMsg = UnitConnectionState(clientId, {
             UnitConnectionState.STATE_KEY: UnitConnectionState.OFFLINE_STATE
         })
-        client.will_set(cxnMsg.get_topic(), cxnMsg.to_json(),
-                        qos=cxnMsg.get_qos(), retain=True)
+        client.will_set(cxnMsg.getTopic(), cxnMsg.toJson(),
+                        qos=cxnMsg.getQos(), retain=True)
         client.username_pw_set(clientId, password)
         client.on_connect = _onConnect
         client.on_disconnect = _onDisconnect
@@ -206,9 +206,9 @@ def publish(msg: BaseMessage) -> None:
     global logger
     if client is None or logger is None:
         raise MqttClientNotInit()
-    logger.debug(f"publishing message on topic {msg.get_topic()}")
-    client.publish(msg.get_topic(), payload=msg.to_json(),
-                   qos=msg.get_qos(), retain=msg.get_retain())
+    logger.debug(f"publishing message on topic {msg.getTopic()}")
+    client.publish(msg.getTopic(), payload=msg.toJson(),
+                   qos=msg.getQos(), retain=msg.getRetain())
 
 
 def subscribe(subs: tuple) -> None:

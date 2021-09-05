@@ -29,7 +29,7 @@ class UnitConnectionState(BaseMessage):
         """
         payload = {}
         payload[self.STATE_KEY] = self.OFFLINE_STATE
-        super().set_payload(payload)
+        super().setPayload(payload)
 
     def set_as_online(self):
         """
@@ -46,7 +46,7 @@ class UnitConnectionState(BaseMessage):
         Return:
             The state of the client contained in the message.
         """
-        return super().get_payload()[self.STATE_KEY]
+        return super().getPayload()[self.STATE_KEY]
 
     def is_offline(self):
         """
@@ -55,7 +55,7 @@ class UnitConnectionState(BaseMessage):
         Return:
             True if the state is online, Flase otherwise.
         """
-        state = super().get_payload()[self.STATE_KEY]
+        state = super().getPayload()[self.STATE_KEY]
         return True if state == self.OFFLINE_STATE else False
 
     def is_online(self):
@@ -65,5 +65,5 @@ class UnitConnectionState(BaseMessage):
         Return:
             True if the state is online, Flase otherwise.
         """
-        state = super().get_payload()[self.STATE_KEY]
+        state = super().getPayload()[self.STATE_KEY]
         return True if state == self.ONLINE_STATE else False
