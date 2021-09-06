@@ -19,8 +19,10 @@ class TestUnitWheeledStateMsg(TestCase):
         """
         self.testUnit = 'test unit'
         self.testPayload = {}
-        self.testPayload[UnitWhldStateMsg.STEERING_KEY] = 0.5
-        self.testPayload[UnitWhldStateMsg.THROTTLE_KEY] = -0.3
+        self.initSteering = 0.5
+        self.initThrottle = -0.3
+        self.testPayload[UnitWhldStateMsg.STEERING_KEY] = self.initSteering
+        self.testPayload[UnitWhldStateMsg.THROTTLE_KEY] = self.initThrottle
         self.testMsg = UnitWhldStateMsg(self.testUnit, self.testPayload)
 
     @patch('messages.unitWhldStateMsg.BaseMessage.__init__')
@@ -45,6 +47,8 @@ class TestUnitWheeledStateMsg(TestCase):
         self.testMsg.setSteering(expectedSteering)
         self.assertEqual(self.testMsg._payload[UnitWhldStateMsg.STEERING_KEY],
                          expectedSteering)
+        self.assertFalse(hasattr(self.testMsg._payload,
+                                 UnitWhldStateMsg.THROTTLE_KEY))
 
     def test_getSteering(self):
         """
@@ -64,6 +68,8 @@ class TestUnitWheeledStateMsg(TestCase):
         self.testMsg.setThrottle(expectedThrottle)
         self.assertEqual(self.testMsg._payload[UnitWhldStateMsg.THROTTLE_KEY],
                          expectedThrottle)
+        self.assertFalse(hasattr(self.testMsg._payload,
+                                 UnitWhldStateMsg.STEERING_KEY))
 
     def test_getThrottle(self):
         """
