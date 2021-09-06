@@ -5,8 +5,8 @@ class UnitThrtlBrkMsg(BaseMessage):
     """
     The Unit throttle/break message.
     """
+    TOPIC_ROOT = 'units/wheeled'
     THROTTLE_KEY = 'amplitude'
-    TOPIC_ROOT = 'units'
 
     def __init__(self, unit: str, payload: dict = None) -> None:
         """
