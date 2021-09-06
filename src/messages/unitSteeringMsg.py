@@ -5,8 +5,8 @@ class UnitSteeringMsg(BaseMessage):
     """
     The unit steering message.
     """
+    TOPIC_ROOT = 'units/wheeled'
     STEERING_KEY = 'angle'
-    TOPIC_ROOT = 'units'
 
     def __init__(self, unit: str, payload=None) -> None:
         """
