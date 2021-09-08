@@ -40,6 +40,7 @@ class TestUnitWhldCmdMsg(TestCase):
         """
         The setSteering method must save the new steering modifier.
         """
+        self.testMsg._payload = None
         expectedModifier = -0.92
         self.testMsg.setSteering(expectedModifier)
         self.assertEqual(self.testMsg._payload[UnitWhldCmdMsg.STEERING_KEY],
@@ -57,6 +58,7 @@ class TestUnitWhldCmdMsg(TestCase):
         """
         The setThrottle method must save the new throttle modifier.
         """
+        self.testMsg._payload = None
         expectedModifier = 0.05
         self.testMsg.setThrottle(expectedModifier)
         self.assertEqual(self.testMsg._payload[UnitWhldCmdMsg.THROTTLE_KEY],
