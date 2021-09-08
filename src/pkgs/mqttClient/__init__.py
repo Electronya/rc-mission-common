@@ -1,8 +1,8 @@
 import paho.mqtt.client as mqtt
 
 from .exceptions import MqttClientNotInit
-from messages.baseMsg import BaseMessage
-from messages.unitCxnStateMsg import UnitCxnStateMsg
+from ..messages.baseMsg import BaseMessage
+from ..messages.unitCxnStateMsg import UnitCxnStateMsg
 
 client = None
 logger = None

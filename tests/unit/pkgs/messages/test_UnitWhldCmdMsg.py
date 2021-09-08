@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.path.abspath('./src'))
 
-from messages.unitWhldCmdMsg import UnitWhldCmdMsg    # noqa: E402 F401
+from pkgs.messages.unitWhldCmdMsg import UnitWhldCmdMsg     # noqa: E402 F401
 
 
 class TestUnitWhldCmdMsg(TestCase):
@@ -23,7 +23,7 @@ class TestUnitWhldCmdMsg(TestCase):
         self.testPayload[UnitWhldCmdMsg.THROTTLE_KEY] = -0.16
         self.testMsg = UnitWhldCmdMsg(self.testUnit, payload=self.testPayload)
 
-    @patch('messages.unitWhldCmdMsg.BaseMessage.__init__')
+    @patch('pkgs.messages.unitWhldCmdMsg.BaseMessage.__init__')
     def test_constructor(self, mockedSuperConst):
         """
         The constructor must initialize the base class with

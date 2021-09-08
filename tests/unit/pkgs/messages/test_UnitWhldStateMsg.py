@@ -6,10 +6,10 @@ import sys
 
 sys.path.append(os.path.abspath('./src'))
 
-from messages.unitWhldStateMsg import UnitWhldStateMsg  # noqa: E402
+from pkgs.messages.unitWhldStateMsg import UnitWhldStateMsg     # noqa: E402
 
 
-class TestUnitWheeledStateMsg(TestCase):
+class TestUnitWhldStateMsg(TestCase):
     """
     The UnitWhldStateMsg class test cases.
     """
@@ -25,7 +25,7 @@ class TestUnitWheeledStateMsg(TestCase):
         self.testPayload[UnitWhldStateMsg.THROTTLE_KEY] = self.initThrottle
         self.testMsg = UnitWhldStateMsg(self.testUnit, self.testPayload)
 
-    @patch('messages.unitWhldStateMsg.BaseMessage.__init__')
+    @patch('pkgs.messages.unitWhldStateMsg.BaseMessage.__init__')
     def test_constructor(self, mockedSuperConst):
         """
         The constructor must initialize the base class
