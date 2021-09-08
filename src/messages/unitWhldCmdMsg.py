@@ -1,31 +1,31 @@
 from .baseMsg import BaseMessage
 
 
-class UnitWhldStateMsg(BaseMessage):
+class UnitWhldCmdMsg(BaseMessage):
     """
-    The wheeled unit state message.
+    The wheeled unit command message.
     """
     TOPIC_ROOT = 'units/wheeled'
     STEERING_KEY = 'steering'
     THROTTLE_KEY = 'throttle'
 
-    def __init__(self, unit: str, payload: dict = None) -> None:
+    def __init__(self, unit: str, payload=None) -> None:
         """
         Constructor.
 
         Params:
             unit:       The unit ID.
-            Payload:    The message payload. Default: None.
+            payload:    The message payload.
         """
-        super().__init__(f"{self.TOPIC_ROOT}/{unit}/state",
+        super().__init__(f"{self.TOPIC_ROOT}/{unit}/steering",
                          unit, payload=payload)
 
     def setSteering(self, modifier: float) -> None:
         """
-        Set the steering state.
+        Set the steering modifier.
 
         Params:
-            modifier:   The steering modifier.
+            modifier:   The new modifier.
         """
         if self._payload is None:
             self._payload = {}
@@ -33,29 +33,29 @@ class UnitWhldStateMsg(BaseMessage):
 
     def getSteering(self) -> float:
         """
-        Get the steering state.
+        Get the steering mofifier.
 
         Return:
-            The steering state.
+            The steering mofifier.
         """
         return self._payload[self.STEERING_KEY]
 
     def setThrottle(self, modifier: float) -> None:
         """
-        Set the throttle state.
+        Set the throttle modifier.
 
         Params:
-            modifier:   The throttle state.
+            modifier:   The new modifier.
         """
         if self._payload is None:
             self._payload = {}
         self._payload[self.THROTTLE_KEY] = modifier
 
-    def getThrottle(self) -> None:
+    def getThrottle(self) -> float:
         """
-        Get the throttle state.
+        Get the throttle modifier.
 
-        Returns:
-            The throttle state.
+        Return:
+            The throttle modifier.
         """
         return self._payload[self.THROTTLE_KEY]
