@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.path.abspath('./src'))
 
-from messages.unitCxnStateMsg import UnitCxnStateMsg    # noqa: E402
+from pkgs.messages.unitCxnStateMsg import UnitCxnStateMsg   # noqa: E402
 
 
 class TestUnitCxnStateMsg(TestCase):
@@ -22,7 +22,7 @@ class TestUnitCxnStateMsg(TestCase):
         self.testPayload[UnitCxnStateMsg.STATE_KEY] = UnitCxnStateMsg.ONLINE_STATE  # noqa: E501
         self.testMsg = UnitCxnStateMsg(self.testUnit, self.testPayload)
 
-    @patch('messages.unitCxnStateMsg.BaseMessage.__init__')
+    @patch('pkgs.messages.unitCxnStateMsg.BaseMessage.__init__')
     def test_constructor(self, mockedSuperConst):
         """
         The constructor must intialize the base class with

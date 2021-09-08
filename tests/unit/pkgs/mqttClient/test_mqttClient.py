@@ -7,8 +7,8 @@ import sys
 
 sys.path.append(os.path.abspath('./src'))
 
-import mqttClient as client                             # noqa: E402
-from messages.unitCxnStateMsg import UnitCxnStateMsg    # noqa: E402
+import pkgs.mqttClient as client                            # noqa: E402
+from pkgs.messages.unitCxnStateMsg import UnitCxnStateMsg   # noqa: E402
 
 
 class TestMqttClient(TestCase):
@@ -26,7 +26,7 @@ class TestMqttClient(TestCase):
                          {'topic': 'test topic 3', 'qos': 2}]
         self.mockedLogging = Mock()
         self.mockedClient = Mock()
-        with patch('mqttClient.mqtt') as mockedMqtt:
+        with patch('pkgs.mqttClient.mqtt') as mockedMqtt:
             mockedMqtt.Client.return_value = self.mockedClient
             client.init(self.mockedLogging, self.testId, self.testPassword)
         self.mockedLogging.reset_mock()
@@ -50,7 +50,7 @@ class TestMqttClient(TestCase):
         The init function must do nothing and warn that the client has
         already been initialized.
         """
-        with patch('mqttClient.mqtt') as mockedMqtt:
+        with patch('pkgs.mqttClient.mqtt') as mockedMqtt:
             client.init(self.mockedLogging, self.testId, self.testPassword)
             self.mockedLogging.assert_not_called()
             mockedMqtt.Client.assert_not_called()
@@ -71,7 +71,7 @@ class TestMqttClient(TestCase):
         """
         client.logger = None
         client.client = None
-        with patch('mqttClient.mqtt') as mockedMqtt:
+        with patch('pkgs.mqttClient.mqtt') as mockedMqtt:
             client.init(self.mockedLogging, self.testId, self.testPassword)
             mockedMqtt.Client.assert_called_once_with(client_id=self.testId)
 
@@ -84,7 +84,7 @@ class TestMqttClient(TestCase):
         testWillMsg = UnitCxnStateMsg(unit=self.testId, payload={
             UnitCxnStateMsg.STATE_KEY: UnitCxnStateMsg.OFFLINE_STATE
         })
-        with patch('mqttClient.mqtt') as mockedMqtt:
+        with patch('pkgs.mqttClient.mqtt') as mockedMqtt:
             mockedMqtt.Client.return_value = self.mockedClient
             client.init(self.mockedLogging, self.testId, self.testPassword)
             client.client.will_set.assert_called_once_with(testWillMsg.getTopic(),      # noqa: E501
@@ -98,7 +98,7 @@ class TestMqttClient(TestCase):
         """
         client.logger = None
         client.client = None
-        with patch('mqttClient.mqtt') as mockedMqtt:
+        with patch('pkgs.mqttClient.mqtt') as mockedMqtt:
             mockedMqtt.Client.return_value = self.mockedClient
             client.init(self.mockedLogging, self.testId, self.testPassword)
             client.client.username_pw_set.assert_called_once_with(self.testId,
@@ -110,7 +110,7 @@ class TestMqttClient(TestCase):
         """
         client.logger = None
         client.client = None
-        with patch('mqttClient.mqtt') as mockedMqtt:
+        with patch('pkgs.mqttClient.mqtt') as mockedMqtt:
             mockedMqtt.Client.return_value = self.mockedClient
             client.init(self.mockedLogging, self.testId, self.testPassword)
             self.assertEqual(client.client.on_connect, client._onConnect)
