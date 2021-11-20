@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.path.abspath('./src'))
 
-from pkgs.messages.unitCxnStateMsg import UnitCxnStateMsg   # noqa: E402
+from pkgs.messages import UnitCxnStateMsg   # noqa: E402
 
 
 class TestUnitCxnStateMsg(TestCase):
