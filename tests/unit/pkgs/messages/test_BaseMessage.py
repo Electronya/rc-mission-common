@@ -6,7 +6,7 @@ import sys
 
 sys.path.append(os.path.abspath('./src'))
 
-from pkgs.messages.baseMsg import BaseMessage   # noqa: E402
+from pkgs.messages import BaseMessage   # noqa: E402
 
 
 class TestBaseMessage(TestCase):
